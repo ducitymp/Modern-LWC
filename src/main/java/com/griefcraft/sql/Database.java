@@ -195,6 +195,21 @@ public abstract class Database {
      * @param exception
      */
     protected void printException(Exception exception) {
+        if(exception.getClass().getName().contains("CommunicationsException")) {
+            System.out.println("Dead connection detected reconnecting to database...");
+
+            connection = null;
+            connected = false;
+
+            try {
+                connect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return;
+        }
+
         throw new ModuleException(exception);
     }
 
